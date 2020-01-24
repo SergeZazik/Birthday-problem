@@ -1,3 +1,4 @@
+import math
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
@@ -13,8 +14,15 @@ def calc_probability(years_: int, number_people_: int, days_range_: int) -> floa
             Returns:
                     result (float): Probability
     """
-    calc = number_people_/(years_/days_range_ * 2) * 100
-    result = round(calc, 8)
+    not_sharing = 1
+    birthdays_list = []
+    for item in range(1, number_people_):
+        probability = item / math.ceil(years_ / days_range_)
+        not_sharing *= (1 - probability)
+        result = 1 - not_sharing
+        birthdays_list.append(result)
+    last = birthdays_list[-1] * 100
+    result = round(last, 8)
     return result
 
 
